@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Response
 from pydantic import BaseModel
-from scraper import grainger_scraper
+from celery_app import tasks
+import asyncio
 
 class ScrapeBody(BaseModel):
     url : str
@@ -21,7 +22,12 @@ async def scrape_grainger(body: ScrapeBody, res: Response):
         return None
     
     try:
-        prod_content, ship_content = await grainger_scraper.run_scrape(url, zipcode)
+        result = tasks.scrape_grainger_url.delay(url, zipcode)
+        await asyncio.sleep(10)
+        prod_content, ship_content = result.get(timeout=20)
+        if prod_content is None or ship_content is None:
+            res.status_code = 500
+            return None 
         return {
             "product": prod_content,
             "shipping": ship_content

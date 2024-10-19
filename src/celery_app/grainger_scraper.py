@@ -41,6 +41,3 @@ async def run_scrape(url, zipcode):
 
         return main_page_content, shipping_content
     
-if __name__ == "__main__":
-    import asyncio
-    asyncio.run(run_scrape("https://www.grainger.com/product/DAYTON-Electric-Baseboard-Heater-3KB39?opr=HPRVP", 70001))
