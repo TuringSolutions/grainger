@@ -26,7 +26,7 @@ async def run_scrape(url, zipcode):
         res = await page.goto(url)
 
         if res.status == 404:
-            return await page.content(), ""
+            return await page.content(), "", 404
 
         await page.get_by_test_id("rta-options-list").locator("span").nth(2).click()
         await page.get_by_text("Ship", exact=True).click()
@@ -42,5 +42,5 @@ async def run_scrape(url, zipcode):
         await page.get_by_text("Order Summary").nth(1).hover()
         shipping_content = await page.content()
 
-        return main_page_content, shipping_content
+        return main_page_content, shipping_content, 200
     

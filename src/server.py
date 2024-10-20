@@ -3,13 +3,15 @@ from pydantic import BaseModel
 from celery_app import tasks
 import asyncio
 
+
 class ScrapeBody(BaseModel):
-    url : str
+    url: str
     zipcode: str
-    token : str
+    token: str
 
 
 app = FastAPI()
+
 
 @app.post("/scrape/grainger")
 async def scrape_grainger(body: ScrapeBody, res: Response):
@@ -20,19 +22,17 @@ async def scrape_grainger(body: ScrapeBody, res: Response):
     if token != "Scrape Grainger":
         res.status_code = 403
         return None
-    
+
     try:
         result = tasks.scrape_grainger_url.delay(url, zipcode)
         await asyncio.sleep(10)
-        prod_content, ship_content = result.get(timeout=20)
+        prod_content, ship_content, status_code = result.get(timeout=20)
+        if status_code == 404:
+            return {"product": prod_content, "shipping": ship_content, "status": 404}
         if prod_content is None or ship_content is None:
             res.status_code = 500
-            return None 
-        return {
-            "product": prod_content,
-            "shipping": ship_content
-        }
+            return None
+        return {"product": prod_content, "shipping": ship_content, "status": 200}
     except:
         res.status_code = 500
         return None
-    
