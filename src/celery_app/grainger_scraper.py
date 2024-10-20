@@ -46,6 +46,6 @@ async def run_scrape(url, zipcode):
 
             return main_page_content, shipping_content, 200
         except Exception as ex:
-            await page.screenshot(path=f"html/{randint(0, 10000)}.jpeg", type="jpeg", full_page=True)
+            await page.screenshot(path=f"htmls/{randint(0, 10000)}.jpeg", type="jpeg", full_page=True)
         
     
