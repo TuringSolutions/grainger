@@ -23,7 +23,10 @@ async def run_scrape(url, zipcode):
 
         # await page.route("*/**", save_resources)
 
-        await page.goto(url)
+        res = await page.goto(url)
+
+        if res.status == 404:
+            return await page.content(), ""
 
         await page.get_by_test_id("rta-options-list").locator("span").nth(2).click()
         await page.get_by_text("Ship", exact=True).click()
