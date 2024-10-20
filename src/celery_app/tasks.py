@@ -1,6 +1,6 @@
 from celery import Celery
 from os import getenv
-from tasks import grainger_scraper
+import grainger_scraper
 import asyncio
 
 REDIS_URI = getenv('REDIS_URI')
