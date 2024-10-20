@@ -9,7 +9,7 @@ async def save_resources(route: Route, request: Request):
 
 async def run_scrape(url, zipcode):
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False, proxy={
+        browser = await p.firefox.launch(headless=False, proxy={
             "server": "geo.iproyal.com:12321",
             "username": "RAD5VCH0WnT6glQG",
             "password": "uJUnzLRMv5c5Ap0Z"
