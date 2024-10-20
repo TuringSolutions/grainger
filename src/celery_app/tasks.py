@@ -16,5 +16,6 @@ def scrape_grainger_url(url, zipcode):
         result = loop.run_until_complete(grainger_scraper.run_scrape(url, zipcode))
         return result
     except Exception as ex:
+        print(ex)
         return None, None
     
