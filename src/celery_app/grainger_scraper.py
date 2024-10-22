@@ -40,6 +40,7 @@ async def run_scrape(url, zipcode):
             except Exception as ex:
                 pass
 
+            await page.wait_for_selector("label:has-text('Ship')")
             await page.locator("label").filter(has_text="Ship").first.click()            
             await page.wait_for_selector('input[name="zipCode"]')
             await page.locator('input[name="zipCode"]').first.fill(str(zipcode))
