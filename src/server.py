@@ -25,8 +25,8 @@ async def scrape_grainger(body: ScrapeBody, res: Response):
 
     try:
         result = tasks.scrape_grainger_url.delay(url, zipcode)
-        await asyncio.sleep(10)
-        prod_content, ship_content, status_code = result.get(timeout=20)
+        await asyncio.sleep(20)
+        prod_content, ship_content, status_code = result.get()
         if status_code == 404:
             return {"product": prod_content, "shipping": ship_content, "status": 404}
         if prod_content is None or ship_content is None:

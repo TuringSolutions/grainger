@@ -35,8 +35,8 @@ async def run_scrape(url, zipcode):
                 return await page.content(), "", 404
 
             try:
-                page.wait_for_selector("button:has-text('Change')",timeout=10000)
-                page.locator("button:has-text('Change')").click()
+                await page.wait_for_selector("button:has-text('Change')",timeout=10000)
+                await page.locator("button:has-text('Change')").click()
             except Exception as ex:
                 pass
 
