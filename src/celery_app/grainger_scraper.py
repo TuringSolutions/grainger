@@ -10,9 +10,7 @@ async def save_resources(route: Route, request: Request):
     
 
 async def run_scrape(url, zipcode):
-    
-    pid = url.split('-')[-1].split('?')[0]
-
+    pid = url.split('?')[0].split('/')[-1].split('-')[-1]
     async with async_playwright() as p:
         try:
             browser = await p.firefox.launch(headless=False, proxy={
