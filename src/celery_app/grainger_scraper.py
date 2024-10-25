@@ -31,12 +31,8 @@ async def run_scrape(url, zipcode):
 
             first_content = await page.content()
 
-            if "Sorry we're having difficulty finding a match for the term(s) you've entered. You can also search for products using other keywords and item numbers." in first_content:
-                return first_content, "", 404
-
-            if "Product is discontinued" in first_content:
+            if any([x.lower() in first_content.lower() for x in ["Sorry we're having difficulty finding a match for the term(s) you've entered. You can also search for products using other keywords and item numbers.", "Product is Discontinued", "Product Is Temporarily Unavailable for Purchase"]]):
                 return first_content, "", 200
-
 
             try:
                 await page.wait_for_selector("button:has-text('Change')",timeout=10000)
@@ -52,6 +48,12 @@ async def run_scrape(url, zipcode):
             main_page_content = await page.content()
 
             await page.locator(f'form[data-testid="add-to-cart-form-{pid}"] button').click()
+
+            try:
+                await page.wait_for_selector('button.button--secondary.dialog__button')
+                await page.locator('button.button--secondary.dialog__button').first.click()
+            except Exception as ex:
+                pass
 
             try:
                 await page.wait_for_selector('button.add-to-cart__footer-confirm', timeout=10000)
