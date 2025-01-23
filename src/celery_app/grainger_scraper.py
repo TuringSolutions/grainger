@@ -22,7 +22,7 @@ async def run_scrape(url, zipcode):
             browser = await p.firefox.launch(headless=False, proxy={
                 "server": "geo.iproyal.com:12321",
                 "username": "RAD5VCH0WnT6glQG",
-                "password": "uJUnzLRMv5c5Ap0Z"
+                "password": "uJUnzLRMv5c5Ap0Z_country-us"
             })
             ctx = await browser.new_context()
             await ctx.add_init_script(
