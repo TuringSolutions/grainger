@@ -2,6 +2,7 @@ from playwright.async_api import async_playwright, Route, Request
 from random import randint
 import traceback
 
+
 def check_product_stock(content):
     if any([x.lower() in content.lower() for x in [
         "Sorry we're having difficulty finding a match for the term(s) you've entered. You can also search for products using other keywords and item numbers.",
@@ -10,7 +11,8 @@ def check_product_stock(content):
 
 
 async def save_resources(route: Route, request: Request):
-    if request.resource_type in ["image", "media", "font"]:
+    if request.resource_type in ["image", "media", "font", "stylesheet"]:
+        print("Blocked")
         await route.abort()
     else:
         await route.continue_()
@@ -31,7 +33,7 @@ async def run_scrape(url, zipcode):
 
             page = await ctx.new_page()
 
-            # await page.route("*/**", save_resources)
+            await page.route("*/**", save_resources)
 
             res = await page.goto(url, wait_until="domcontentloaded")
 
@@ -101,3 +103,8 @@ async def run_scrape(url, zipcode):
         except Exception as ex:
             traceback.print_exc()
             await page.screenshot(path=f"htmls/{randint(0, 10000)}.jpeg", type="jpeg", full_page=True)
+
+
+if __name__=="__main__":
+    import asyncio
+    asyncio.run(run_scrape("https://www.grainger.com/product/RITTAL-Enclosure-Air-Conditioner-6YDP4", "70001"))
