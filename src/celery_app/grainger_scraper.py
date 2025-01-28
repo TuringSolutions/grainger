@@ -26,7 +26,7 @@ async def run_scrape(url, zipcode):
                 "username": "RAD5VCH0WnT6glQG",
                 "password": "uJUnzLRMv5c5Ap0Z_country-us"
             })
-            ctx = await browser.new_context()
+            ctx = await browser.new_context(viewport={"width": 1920, "height": 1080})
             await ctx.add_init_script(
                 "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
             )
